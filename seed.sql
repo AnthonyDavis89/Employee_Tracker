@@ -1,3 +1,4 @@
+
 USE employeeDB;
 
 INSERT INTO department (department)

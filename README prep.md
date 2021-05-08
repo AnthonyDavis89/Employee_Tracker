@@ -53,4 +53,4 @@ Build a command-line application that at a minimum allows the user to:
 
 ## Result
 Link to video:
-<https://drive.google.com/file/d/1tTtjpH0DSPK4vfp4xgROcGUzrnM4tCq4/view?usp=sharing>
+<>
