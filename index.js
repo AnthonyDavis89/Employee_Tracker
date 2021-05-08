@@ -66,81 +66,31 @@ function mainMenu() {
 }
 
 function viewEmployees() {
-  connection.query(
-    `select employee.id, employee.first_name, employee.last_name, role.title, department.name, role.salary, employee.manager_id, employee.first_name 
-    from employee 
-    inner join role ON employee.role_id=role.id 
-    inner join department ON department.id=role.department_id;`,
-    function (err, res) {
-      if (err) throw err;
-      console.table(res);
+  var query = "SELECT * FROM employee;";
+  connection.query(query, function (err, res) {
+    if (err) throw err;
+    console.table(res);
+  });
       mainMenu();
     }
-  );
+ 
+function viewDepartments() {
+  var query = "SELECT * FROM department;";
+  connection.query(query, function (err, res) {
+    if (err) throw err;
+    console.table(res);
+  });
+  mainMenu();
 }
 
-function viewDepartments() {
-  let departments = [];
-  connection.query("SELECT name FROM department;", function (err, res) {
-    if (err) throw err;
-    for (let i = 0; i < res.length; i++) {
-      departments.push(res[i].name);
-    }
-    inquirer.prompt({
-        name: "department",
-        type: "list",
-        message: "Which department would you like to view?",
-        choices: departments,
-      })
-      .then((response) => {
-        connection.query(
-          `SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name, role.salary, 
-         concat(employee2.first_name, " ", employee2.last_name) manager FROM employee 
-          LEFT JOIN role ON employee.role_id=role.id 
-          LEFT JOIN department ON department.id=role.department_id 
-          LEFT JOIN employee employee2 ON employee.id=employee2.manager_id 
-          WHERE name=?`,
-          response.department,
-          function (err, res) {
-            if (err) throw err;
-            console.table(res);
-            mainMenu();
-          }
-        );
-      });
-  });
-}
 
 function viewRole() {
-  let roles = [];
-  connection.query("SELECT title FROM role;", function (err, res) {
+  var query = "SELECT * FROM role;";
+  connection.query(query, function (err, res) {
     if (err) throw err;
-    for (let i = 0; i < res.length; i++) {
-      roles.push(res[i].title);
-    }
-    inquirer.prompt({
-        name: "role",
-        type: "list",
-        message: "Which of the following roles would you like to view?",
-        choices: roles,
-      })
-      .then((response) => {
-        connection.query(
-          `SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name, role.salary, 
-                    concat(employee2.first_name, " ", employee2.last_name) manager FROM employee 
-                    LEFT JOIN role ON employee.role_id=role.id 
-                    LEFT JOIN department ON department.id=role.department_id 
-                    LEFT JOIN employee employee2 ON employee.id=employee2.manager_id 
-                    WHERE title=?`,
-          response.role,
-          function (err, res) {
-            if (err) throw err;
-            console.table(res);
-            mainMenu();
-          }
-        );
-      });
+    console.table(res);
   });
+  mainMenu();
 }
 
 function updateRole() {
@@ -265,7 +215,6 @@ function addEmployee() {
     });
 }
 
-//Done
 function newDepartment() {
   inquirer.prompt({
       name: "newDepartment",
