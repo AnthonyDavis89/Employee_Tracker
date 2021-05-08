@@ -8,12 +8,12 @@ USE employeeDB;
 -- Creating the department table 
 CREATE TABLE department (
 id INT NOT NULL AUTO_INCREMENT,
-department VARCHAR(30) UNIQUE NOT NULL,
+dname VARCHAR(30) UNIQUE NOT NULL,
 PRIMARY KEY (id)
 );
 
 -- Creating the role table (note that could ot name the table role because it seemed to be a reserved word)
-CREATE TABLE teamRoles (
+CREATE TABLE roles (
 id INT NOT NULL AUTO_INCREMENT,
 title VARCHAR(30) NOT NULL,
 salary DECIMAL(10,0) NOT NULL,

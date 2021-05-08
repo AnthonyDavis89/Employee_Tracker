@@ -35,6 +35,7 @@ function mainMenu() {
         "Add role",
         "Add employee",
         "Update employee role",
+        "Exit"
       ],
     })
     .then(function (response){
@@ -59,8 +60,10 @@ function mainMenu() {
            addEmployee();
           break;  
         case "Update employee's role":
-           updateRole();
+          updateRole();
           break;
+        case "Exit":
+          break;   
       }
     });
 }
@@ -85,7 +88,7 @@ function viewDepartments() {
 
 
 function viewRole() {
-  var query = "SELECT * FROM role;";
+  var query = "SELECT * FROM roles;";
   connection.query(query, function (err, res) {
     if (err) throw err;
     console.table(res);
@@ -237,56 +240,33 @@ function newDepartment() {
 }
 
 function newRole() {
-  let departments = [];
-  connection.query("SELECT name FROM department;", function (err, res) {
-    if (err) throw err;
-    for (let i = 0; i < res.length; i++) {
-      departments.push(res[i].name);
-    }
-    inquirer.prompt([
-        {
-          name: "deptId",
-          type: "list",
-          message: "What department will this role be in?",
-          choices: departments,
-        },
-        {
-          name: "newRole",
-          type: "input",
-          message: "What is the name of the new role you would like to add?",
-        },
-        {
-          name: "salary",
-          type: "input",
-          message: "What is the salary for this new role?",
-        },
-      ])
-      .then((response) => {
-        connection.query(`SELECT id, name FROM department;`, function (
-          err,
-          res
-        ) {
+  inquirer.prompt([
+      {
+        name: "name",
+        type: "input",
+        message: "Please enter the new job title?",
+      },
+      {
+        name: "salary",
+        type: "number",
+        message: "Please enter the salary?",
+      },
+      {
+        name: "departmentid",
+        type: "number",
+        message: "Please enter the department ID?",
+      },
+    ])
+    .then(({ name, salary, department }) => {
+      connection.query(
+        `INSERT into role (title, salary, department_id) VALUES (?,?,?);`,
+        function (err, res) {
           if (err) throw err;
-          res.forEach((department) => {
-            if (department.name == response.deptId) {
-              response.deptId = department.id;
-            }
-          });
-          connection.query(
-            `INSERT INTO role SET ?`,
-            {
-              title: response.newRole,
-              salary: response.salary,
-              department_id: response.deptId,
-            },
-            function (err, res) {
-              if (err) throw err;
-            }
-          );
-          console.log(`Successfully added ${response.newRole}!`);
-          mainMenu();
-        });
-      });
-  });
+          [name], [salary], [departmentid];
+          console.log(res)
+        }
+      );
+      mainMenu();
+    });
 }
 
