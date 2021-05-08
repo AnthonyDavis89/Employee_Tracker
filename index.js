@@ -257,7 +257,7 @@ function newRole() {
         message: "Please enter the department ID?",
       },
     ])
-    .then(({ name, salary, department }) => {
+    .then(({ name, salary, departmentid }) => {
       connection.query(
         `INSERT into role (title, salary, department_id) VALUES (?,?,?);`,
         function (err, res) {

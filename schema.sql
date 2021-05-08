@@ -1,3 +1,4 @@
+SET FOREIGN_KEY_CHECKS=0;
 
 DROP DATABASE IF EXISTS employeeDB;
 
@@ -33,3 +34,4 @@ PRIMARY KEY (id),
 FOREIGN KEY (role_id) REFERENCES roles(id),
 FOREIGN KEY (manager_id) REFERENCES employee(id)
 );
+

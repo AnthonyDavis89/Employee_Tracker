@@ -1,7 +1,7 @@
 
 USE employeeDB;
 
-INSERT INTO department (department)
+INSERT INTO department (dname)
 VALUES ('Accounting'), ('Human Resources'), ('Legal'), ('IT');
 
 INSERT INTO roles (title, salary, department_id)
