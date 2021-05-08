@@ -100,53 +100,7 @@ function viewRole() {
   });
   mainMenu();
 }
-
-function updateRole() {
-    connection.query(
-      "SELECT id, first_name FROM employee",
-      function (err, results2) {
-        if (err) throw err;
-        let employees = results2.map(
-          (employee) => employee.id + " " + employee.first_name
-        );
   
-        inquirer.prompt({
-            name: "selectEmployee",
-            type: "list",
-            message: "Please select an employee?",
-            choices: employees,
-          })
-          .then((response) => {
-            let employeeId = response.selectEmployee.split(" ")[0];
-            connection.query("SELECT id, title FROM role;", function (err, res) {
-              if (err) throw err;
-              let roles = res.map((role) => role.id + " " + role.title);
-  
-              inquirer.prompt({
-                  name: "newRole",
-                  type: "list",
-                  message: "What is their new role?",
-                  choices: roles,
-                })
-                .then((response2) => {
-                  connection.query(
-                    `UPDATE employee SET role_id=${
-                      response2.newRole.split(" ")[0]
-                    } WHERE employee.id=${employeeId}`,
-                    function (err, res) {
-                      if (err) throw err;
-                    }
-                  );
-                  console.log("Role update successful!");
-                  mainMenu();
-                });
-            });
-          });
-      }
-    );
-  }
-  
-
 function addEmployee() {
   let managerId = 0;
   connection.query("SELECT manager_id FROM employee;", function (err, res) {
@@ -279,7 +233,6 @@ function newRole() {
     });
 }
 
-//delete an employee
 function delEmpoyee() {
   connection.query(
     "SELECT concat(first_name, ' ', last_name) fullName FROM employee",
@@ -298,7 +251,7 @@ function delEmpoyee() {
             `DELETE FROM employee WHERE concat(first_name, ' ', last_name) ="${response.pendingDelete}"`,
             function (err, res) {
               if (err) throw err;
-              console.log(`${response.pendingDelete} has been removed from the company Tables`);
+              console.log(`${response.pendingDelete} has been removed from the company tables`);
               mainMenu();
             }
           );
