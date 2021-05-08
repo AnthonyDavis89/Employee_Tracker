@@ -63,6 +63,7 @@ function mainMenu() {
           updateRole();
           break;
         case "Exit":
+          connection.end();
           break;   
       }
     });
@@ -220,7 +221,7 @@ function addEmployee() {
 
 function newDepartment() {
   inquirer.prompt({
-      name: "newDepartment",
+      name: "dname",
       type: "input",
       message: "Please enter new department name?",
     })
@@ -228,7 +229,7 @@ function newDepartment() {
       connection.query(
         `INSERT INTO department SET ?`,
         {
-          name: response.newDepartment,
+          dname: response.dname,
         },
         function (err, res) {
           if (err) throw err;
@@ -259,10 +260,14 @@ function newRole() {
     ])
     .then(({ name, salary, departmentid }) => {
       connection.query(
-        `INSERT into role (title, salary, department_id) VALUES (?,?,?);`,
+        `INSERT into roles SET ?`,
+        {
+          title: name,
+          salary: salary,
+          department_id: departmentid,
+        },
         function (err, res) {
           if (err) throw err;
-          [name], [salary], [departmentid];
           console.log(res)
         }
       );
