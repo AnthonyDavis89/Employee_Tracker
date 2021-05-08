@@ -35,6 +35,7 @@ function mainMenu() {
         "Add role",
         "Add employee",
         "Update employee role",
+        "Delete employee",
         "Exit"
       ],
     })
@@ -62,6 +63,9 @@ function mainMenu() {
         case "Update employee's role":
           updateRole();
           break;
+        case "Delete employee":
+          delEmpoyee();
+          break;  
         case "Exit":
           connection.end();
           break;   
@@ -99,11 +103,11 @@ function viewRole() {
 
 function updateRole() {
     connection.query(
-      "SELECT id, concat(first_name, ' ', last_name) fullName FROM employee",
+      "SELECT id, first_name FROM employee",
       function (err, results2) {
         if (err) throw err;
         let employees = results2.map(
-          (employee) => employee.id + " " + employee.fullName
+          (employee) => employee.id + " " + employee.first_name
         );
   
         inquirer.prompt({
@@ -154,7 +158,7 @@ function addEmployee() {
     }
   });
   let roles = [];
-  connection.query("SELECT title FROM role;", function (err, res) {
+  connection.query("SELECT title FROM roles;", function (err, res) {
     if (err) throw err;
     for (let i = 0; i < res.length; i++) {
       roles.push(res[i].title);
@@ -186,7 +190,7 @@ function addEmployee() {
     ])
     .then((response) => {
       let roleId;
-      connection.query("SELECT id, title FROM role;", function (err, res) {
+      connection.query("SELECT id, title FROM roles;", function (err, res) {
         if (err) throw err;
         for (let i = 0; i < res.length; i++) {
           if (res[i].title == response.role) {
@@ -273,5 +277,33 @@ function newRole() {
       );
       mainMenu();
     });
+}
+
+//delete an employee
+function delEmpoyee() {
+  connection.query(
+    "SELECT concat(first_name, ' ', last_name) fullName FROM employee",
+    function (err, resultsPull) {
+      if (err) throw err;
+      let employees = resultsPull.map((employee) => employee.fullName);
+      inquirer
+        .prompt({
+          name: "pendingDelete",
+          type: "list",
+          message: "Please chose an employee you want to delete?",
+          choices: employees,
+        })
+        .then((response) => {
+          connection.query(
+            `DELETE FROM employee WHERE concat(first_name, ' ', last_name) ="${response.pendingDelete}"`,
+            function (err, res) {
+              if (err) throw err;
+              console.log(`${response.pendingDelete} has been removed from the company Tables`);
+              mainMenu();
+            }
+          );
+        });
+    }
+  );
 }
 

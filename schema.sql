@@ -20,7 +20,7 @@ title VARCHAR(30) NOT NULL,
 salary DECIMAL(10,0) NOT NULL,
 department_id INT NOT NULL,
 PRIMARY KEY (id),
-FOREIGN KEY (department_id) REFERENCES department(id)
+CONSTRAINT fkey_department FOREIGN KEY(department_id) REFERENCES department(id) ON DELETE CASCADE
 );
 
 -- Creating the employee table 
@@ -31,7 +31,7 @@ last_name VARCHAR(30) NOT NULL,
 role_id INT NOT NULL,
 manager_id INT NULL,
 PRIMARY KEY (id),
-FOREIGN KEY (role_id) REFERENCES roles(id),
-FOREIGN KEY (manager_id) REFERENCES employee(id)
+CONSTRAINT fkey_role FOREIGN KEY(role_id) REFERENCES roles(id) ON DELETE CASCADE,
+CONSTRAINT fkey_manager FOREIGN KEY(manager_id) REFERENCES employee(id) ON DELETE SET NULL
 );
 
