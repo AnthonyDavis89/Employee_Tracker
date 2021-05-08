@@ -1,4 +1,4 @@
-# 10 Object-Oriented Programming: Team Profile Generator
+# Unit 12 MySQL Homework: Employee Tracker
 
 ## Repository
 
